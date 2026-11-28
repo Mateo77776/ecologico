@@ -6,9 +6,22 @@ class ReciclajeForm(forms.ModelForm):
         model = Reciclaje
         fields = ['tipo_material', 'peso_kg', 'punto_acopio']
         widgets = {
-            'tipo_material': forms.Select(attrs={'class': 'form-select'}),
-            'peso_kg': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'placeholder': 'Ej. 5.50'}),
-            'punto_acopio': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej. Centro Comunitario Norte'}),
+            'tipo_material': forms.Select(attrs={
+                'class': 'form-select',
+                'required': True
+            }),
+            'peso_kg': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'step': '0.01',
+                'placeholder': 'Ej. 5.50',
+                'required': True
+            }),
+            'punto_acopio': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ej. Centro Comunitario',
+                'required': True
+            }),
         }
 
     def clean_peso_kg(self):
@@ -17,15 +30,33 @@ class ReciclajeForm(forms.ModelForm):
             raise forms.ValidationError("El peso debe ser mayor a 0 kg.")
         return peso
 
+
 class PlantacionForm(forms.ModelForm):
     class Meta:
         model = Plantacion
         fields = ['especie_arbol', 'cantidad', 'ubicacion', 'fecha_plantacion']
         widgets = {
-            'especie_arbol': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej. Pino, Encino'}),
-            'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'min': '1'}),
-            'ubicacion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej. Parque Morelos'}),
-            'fecha_plantacion': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'especie_arbol': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ej. Pino, Encino',
+                'required': True
+            }),
+            'cantidad': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'placeholder': 'Ej. 10',
+                'required': True
+            }),
+            'ubicacion': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ej. Parque Morelos',
+                'required': True
+            }),
+            'fecha_plantacion': forms.DateInput(attrs={
+                'class': 'form-control',
+                'type': 'date',
+                'required': True
+            }),
         }
 
     def clean_cantidad(self):

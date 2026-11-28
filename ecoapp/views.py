@@ -45,8 +45,10 @@ def crear_reciclaje(request):
             obj = form.save(commit=False)
             obj.usuario = request.user
             obj.save()
-            messages.success(request, 'Registro de reciclaje guardado correctamente.')
+            messages.success(request, '¡Registro de reciclaje guardado correctamente!')
             return redirect('lista_reciclaje')
+        else:
+            messages.error(request, 'Error al guardar el registro. Verifica que los datos sean válidos.')
     else:
         form = ReciclajeForm()
     return render(request, 'ecoapp/formulario.html', {'form': form, 'titulo': 'Registrar Reciclaje', 'volver': 'lista_reciclaje'})
@@ -58,8 +60,10 @@ def editar_reciclaje(request, pk):
         form = ReciclajeForm(request.POST, instance=obj)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Registro de reciclaje actualizado.')
+            messages.success(request, '¡Registro de reciclaje actualizado correctamente!')
             return redirect('lista_reciclaje')
+        else:
+            messages.error(request, 'Error al actualizar el registro. Revisa los campos ingresados.')
     else:
         form = ReciclajeForm(instance=obj)
     return render(request, 'ecoapp/formulario.html', {'form': form, 'titulo': 'Editar Reciclaje', 'volver': 'lista_reciclaje'})
@@ -68,8 +72,11 @@ def editar_reciclaje(request, pk):
 def eliminar_reciclaje(request, pk):
     obj = get_object_or_404(Reciclaje, pk=pk)
     if request.method == 'POST':
-        obj.delete()
-        messages.warning(request, 'Registro de reciclaje eliminado.')
+        try:
+            obj.delete()
+            messages.success(request, 'Registro de reciclaje eliminado correctamente.')
+        except Exception:
+            messages.error(request, 'Ocurrió un error al intentar eliminar el registro de reciclaje.')
         return redirect('lista_reciclaje')
     return render(request, 'ecoapp/confirmar_eliminar.html', {'objeto': obj, 'volver': 'lista_reciclaje'})
 
@@ -90,8 +97,10 @@ def crear_plantacion(request):
             obj = form.save(commit=False)
             obj.usuario = request.user
             obj.save()
-            messages.success(request, 'Plantación registrada exitosamente.')
+            messages.success(request, '¡Plantación registrada exitosamente!')
             return redirect('lista_plantacion')
+        else:
+            messages.error(request, 'Error al registrar la plantación. Verifica que los datos sean válidos.')
     else:
         form = PlantacionForm()
     return render(request, 'ecoapp/formulario.html', {'form': form, 'titulo': 'Registrar Plantación', 'volver': 'lista_plantacion'})
@@ -103,8 +112,10 @@ def editar_plantacion(request, pk):
         form = PlantacionForm(request.POST, instance=obj)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Plantación actualizada.')
+            messages.success(request, '¡Plantación actualizada correctamente!')
             return redirect('lista_plantacion')
+        else:
+            messages.error(request, 'Error al actualizar la plantación. Revisa los campos ingresados.')
     else:
         form = PlantacionForm(instance=obj)
     return render(request, 'ecoapp/formulario.html', {'form': form, 'titulo': 'Editar Plantación', 'volver': 'lista_plantacion'})
@@ -113,7 +124,10 @@ def editar_plantacion(request, pk):
 def eliminar_plantacion(request, pk):
     obj = get_object_or_404(Plantacion, pk=pk)
     if request.method == 'POST':
-        obj.delete()
-        messages.warning(request, 'Plantación eliminada.')
+        try:
+            obj.delete()
+            messages.success(request, 'Plantación eliminada correctamente.')
+        except Exception:
+            messages.error(request, 'Ocurrió un error al intentar eliminar la plantación.')
         return redirect('lista_plantacion')
     return render(request, 'ecoapp/confirmar_eliminar.html', {'objeto': obj, 'volver': 'lista_plantacion'})
